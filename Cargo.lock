@@ -1,4 +1,4 @@
 [[package]]
-name = "todo"
+name = "minigrep"
 version = "0.1.0"
 

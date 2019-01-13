@@ -1,20 +1,29 @@
 use std::env; //Needed for accessing the environment args
-
+use std::fs::File;
+use std::io::prelude::*;
 
 fn main() {
     //Accepting command line arguments
     let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
+    
+    //Need logic check to make sure there are the correct number of arguments supplied
+    let config = parse_config(&args);//Technically could give up ownership here???
+    let mut f = File::open(config.filename).expect("File not found");
 
-    if &args.len() > &1 {
-        let paramOne = &args[1];
-        println!("{}", paramOne);
-    }
-    else {
-        println!("no value passed");
-    }
+    let mut contents = String::new();
+    f.read_to_string(&mut contents).expect("Error reading file");
 
-    //Adding to database file (plain txt file should work)
+    println!("{}", config.query);
+    println!("With text \n {}", contents);
+}
 
-    //Retreiving from txt file
+struct Config {
+    query: String,
+    filename: String
+}
+
+fn parse_config(args: &[String]) -> Config {
+    let query = args[1].clone();//Not the most efficient way to copy a string
+    let filename  = args[2].clone();
+    Config { query, filename }
 }
